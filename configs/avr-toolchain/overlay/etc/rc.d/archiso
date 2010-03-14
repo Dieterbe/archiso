@@ -1,0 +1,43 @@
+. /etc/rc.conf
+. /etc/rc.d/functions
+. /etc/archiso/functions
+
+
+do_homedir ()
+{
+    stat_busy "Scanning for existing HOME directory"
+    user="$(cmdline_param homeuser)"
+    for hdir in $(find /mnt -name "home/${user}" 2>/dev/null); do
+        mkdir -p "/home/arch/"
+        # break after the first success...
+        mount --bind "${hdir}" "/home/arch/" && break
+    done
+    stat_done
+}
+
+do_makeuser ()
+{
+    stat_busy "Making the default user arch"
+    addgroups="audio,disk,optical,wheel"
+    useradd -p "" -g users -G $addgroups arch
+    mkdir /home/arch
+    chmod 700 /home/arch
+    chown arch:users /home/arch
+    stat_done
+}
+
+do_locale_gen ()
+{
+    stat_busy "Generating locales..."
+    sed -i "s/#\(${LOCALE/[@.]*}\)/\1/" /etc/locale.gen
+    /usr/sbin/locale-gen > /dev/null
+    stat_done
+}
+
+case "$1" in
+  start)
+    do_locale_gen
+    do_makeuser
+    ;;
+esac
+exit 0
