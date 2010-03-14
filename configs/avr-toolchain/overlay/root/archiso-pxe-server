@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# usage example: ./archiso-pxe-server 192.168.0.10 /dev/cdrom
+
+IP=$1
+ISO=$2
+
+dnsmasq \
+  --enable-tftp \
+  --tftp-root=/bootmnt/boot \
+  --dhcp-boot=/pxelinux.0,"${IP}" \
+  --dhcp-range=${IP%.*}.2,${IP%.*}.254,86400
+nbd-server 9040 ${ISO} -r
