@@ -1,0 +1,41 @@
+###############################################################################
+
+# Steps to make archiso-avr:
+
+pacman -S devtools
+
+mkarchroot /tmp/pichicho base
+mkarchroot -r bash /tmp/pichicho
+# vi/nano /etc/pacman.d/mirrorlist 
+pacman -Sy base-devel
+pacman -S mkinitcpio-nfs-utils git squashfs-tools syslinux devtools cdrkit make
+
+cd /tmp
+git clone git://github.com/djgera/archiso -b avr-toolchain
+cd archiso/archiso
+make install
+cd ../configs/avr-toolchain
+
+./makerepo.sh
+
+cat << FIN > /tmp/pacman.conf
+[arch-avr]
+Server = file:///home/arch-avr/os/$(uname -m)
+FIN
+
+pacman -Sy nbd --config=/tmp/pacman.conf
+
+make
+
+###############################################################################
+
+# Steps to setup archiso-avr as PXE server via NBD
+
+1) start archiso-avr in some machine
+2) login as root
+3) setup your network card
+4) ./archiso-pxe-server configured.ip /dev/cdrom
+
+Done!, now all machines with PXE enabled will boot archiso-avr live enviroment
+
+###############################################################################
