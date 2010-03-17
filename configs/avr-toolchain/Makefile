@@ -1,5 +1,5 @@
 kver=2.6.32-ARCH
-ver=$(shell date +%Y.%m)
+ver=$(shell date +%Y.%m.%d)
 
 WORKDIR=work
 
@@ -7,11 +7,13 @@ ARCH?=$(shell uname -m)
 REPO_ARCH_AVR="file:///home/arch-avr/os/$(ARCH)"
 PUBLISHER="Gerardo Exequiel Pozzi <http://www.github.com/djgera/archiso-avr>"
 APPLICATION="Arch Linux Live Media with AVR toolchain and tools"
-LABEL=AVR_$(ver)
+LABEL=AVR_$(shell date +%Y%m)
 
-ISOname=archlinux-$(ver)-avr-$(ARCH).iso
+ISOname=avr-toolchain-$(ver)-$(ARCH).iso
 
 PACKAGES="$(shell cat packages.lst)"
+
+kver_FILE=$(WORKDIR)/root-image/etc/mkinitcpio.d/kernel26.kver
 
 all: default-iso
 
@@ -51,7 +53,7 @@ bootfiles: root-image
 initcpio: $(WORKDIR)/iso/boot/archiso.img
 $(WORKDIR)/iso/boot/archiso.img: mkinitcpio.conf $(WORKDIR)/root-image/.arch-chroot
 	mkdir -p $(WORKDIR)/iso/boot
-	mkinitcpio -c ./mkinitcpio.conf -b $(WORKDIR)/root-image -k $(kver) -g $@
+	mkinitcpio -c ./mkinitcpio.conf -b $(WORKDIR)/root-image -k $(shell grep ^ALL_kver $(kver_FILE) | cut -d= -f2) -g $@
 
 
 # overlay filesystem
