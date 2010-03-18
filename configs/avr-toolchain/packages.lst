@@ -15,6 +15,7 @@ lftp
 links
 lsof
 mc
+nbd
 ntfs-3g
 ntfsprogs
 ntp
@@ -29,5 +30,3 @@ syslinux
 tree
 unzip
 valgrind
-
-nbd

@@ -23,8 +23,6 @@ cat << FIN > /tmp/pacman.conf
 Server = file:///home/arch-avr/os/$(uname -m)
 FIN
 
-pacman -Sy nbd --config=/tmp/pacman.conf
-
 make
 
 ###############################################################################
@@ -34,7 +32,7 @@ make
 1) start archiso-avr in some machine
 2) login as root
 3) setup your network card
-4) ./archiso-pxe-server configured.ip /dev/cdrom
+4) /arch/archiso-pxe-server
 
 Done!, now all machines with PXE enabled will boot archiso-avr live enviroment
 
