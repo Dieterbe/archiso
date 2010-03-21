@@ -38,7 +38,7 @@ copy_files()
         cp $BOOT/archiso.img $TFTPBOOT/boot
         cp $BOOT/isolinux/pxelinux.0 $TFTPBOOT
         cp $BOOT/isolinux/menu.c32 $TFTPBOOT
-        sed 's|IPAPPEND 0|IPAPPEND 1|g' \
+        sed 's|IPAPPEND 0|IPAPPEND 3|g' \
             $BOOT/isolinux/isolinux.cfg > \
             $TFTPBOOT/pxelinux.cfg/default
     fi
